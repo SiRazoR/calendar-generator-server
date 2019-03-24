@@ -11,6 +11,8 @@ import com.calendargenerator.model.Classes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -50,8 +52,8 @@ public class IcsCalendar {
         biweekly.component.VEvent event = new biweekly.component.VEvent();
         event.setSummary(classes.getName());
         event.setLocation(classes.getLocation());
-        event.setDateStart(classes.getStartDate().getTime());
-        event.setDateEnd(classes.getEndDate().getTime());
+        event.setDateStart(classes.getStartDateCalendar().getTime());
+        event.setDateEnd(classes.getEndDateCalendar().getTime());
         event.setDescription(classes.getInstructor());
         return event;
     }
@@ -61,10 +63,10 @@ public class IcsCalendar {
         log.info(classesName + " was succesfully deleted");
     }
 
-    public void removeClasses(String classesName, Integer classesDayInWeek) {
+    public void removeClasses(String classesName, Integer classesDayOfWeek) {
         this.classes.removeIf(element -> element.getName().contains(classesName) &&
-                element.getStartDate().getTime().getDay() == classesDayInWeek);
-        log.info(classesName + " on " + classesDayInWeek + " day of the week was succesfully deleted");
+                element.getStartDateCalendar().get(Calendar.DAY_OF_WEEK) == classesDayOfWeek);
+        log.info(classesName + " on " + new DateFormatSymbols().getWeekdays()[classesDayOfWeek] + " was succesfully deleted");
     }
 
     @Override

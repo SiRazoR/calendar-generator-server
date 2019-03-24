@@ -17,7 +17,7 @@ public class CalendarService {
             add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
             add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
             add(HttpHeaders.EXPIRES, "0");
-            add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=test.ics");
+            add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=classes.ics");
         }};
 
         return ResponseEntity.ok()

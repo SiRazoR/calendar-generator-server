@@ -1,8 +1,8 @@
 package com.calendargenerator.model;
 
 
-import org.hibernate.annotations.Entity;
-import org.springframework.data.annotation.Id;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -12,20 +12,20 @@ public class Classes {
     @Id
     private UUID id;
 
-    private Calendar startDate;
-    private Calendar endDate;
+    private Calendar startDateCalendar;
+    private Calendar endDateCalendar;
     private String name;
     private String instructor;
     private String location;
 
-    protected Classes() {
+    private Classes() {
         this.id = UUID.randomUUID();
     }
 
     public Classes(Calendar startDate, Calendar endDate, String name, String instructor, String location) {
         this();
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDateCalendar = startDate;
+        this.endDateCalendar = endDate;
         this.name = name;
         this.instructor = instructor;
         this.location = location;
@@ -35,12 +35,12 @@ public class Classes {
         return id;
     }
 
-    public Calendar getStartDate() {
-        return startDate;
+    public Calendar getStartDateCalendar() {
+        return startDateCalendar;
     }
 
-    public Calendar getEndDate() {
-        return endDate;
+    public Calendar getEndDateCalendar() {
+        return endDateCalendar;
     }
 
     public String getName() {
@@ -58,8 +58,8 @@ public class Classes {
     @Override
     public String toString() {
         return "\nLecture{" +
-                "startDate=" + startDate.getTime()+
-                ", endDate=" + endDate.getTime() +
+                "startDate=" + startDateCalendar.getTime()+
+                ", endDate=" + endDateCalendar.getTime() +
                 ", name='" + name + '\'' +
                 ", instructor='" + instructor + '\'' +
                 ", location='" + location + '\'' +
