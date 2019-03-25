@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalendarService {
 
-    public ResponseEntity<String> getSchedule(String groupId) throws Exception {
+    public ResponseEntity<String> getSchedule(String groupId) {
         IcsCalendar calendar = new IcsCalendar(groupId);
 
         HttpHeaders headers = new HttpHeaders() {{

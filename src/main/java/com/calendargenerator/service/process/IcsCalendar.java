@@ -30,7 +30,7 @@ public class IcsCalendar {
         this.scraper = new ClassesScraper();
     }
 
-    public IcsCalendar(String groupId) throws Exception {
+    public IcsCalendar(String groupId) {
         this();
         this.classes = scraper.getLectureList(groupId);
     }

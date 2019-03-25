@@ -18,7 +18,7 @@ public class Classes {
     private String instructor;
     private String location;
 
-    private Classes() {
+    public Classes() {
         this.id = UUID.randomUUID();
     }
 
