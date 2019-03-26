@@ -29,7 +29,7 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<Object> handleNotFound(final RuntimeException ex, final WebRequest request) {
         log.error("404 Status Code");
         ex.printStackTrace();
-        ErrorMessage response = new ErrorMessage(ex.getMessage(), HttpStatus.NOT_FOUND, "TODO"); //TODO documentation
+        ErrorMessage response = new ErrorMessage(ex.getMessage(), HttpStatus.NOT_FOUND);
         return handleExceptionInternal(ex, response, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
@@ -37,7 +37,7 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<Object> handleInternal(final RuntimeException ex, final WebRequest request) {
         log.error("500 Status Code");
         ex.printStackTrace();
-        ErrorMessage response = new ErrorMessage(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, "TODO"); //TODO documentation
+        ErrorMessage response = new ErrorMessage(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return handleExceptionInternal(ex, response, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 }

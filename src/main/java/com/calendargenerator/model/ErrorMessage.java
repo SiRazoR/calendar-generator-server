@@ -13,18 +13,16 @@ public class ErrorMessage {
     private String errorCodePhrase;
     private int errorCodeValue;
     private String errorMessage;
-    private String documentation;
 
     public ErrorMessage() {
         this.id = UUID.randomUUID();
     }
 
-    public ErrorMessage(String errorMessage, HttpStatus httpStatus, String documentation) {
+    public ErrorMessage(String errorMessage, HttpStatus httpStatus) {
         this();
         this.errorMessage = errorMessage;
         this.errorCodePhrase = httpStatus.getReasonPhrase();
         this.errorCodeValue = httpStatus.value();
-        this.documentation = documentation;
     }
 
     public UUID getId() {
@@ -57,13 +55,5 @@ public class ErrorMessage {
 
     public void setErrorCodeValue(int errorCodeValue) {
         this.errorCodeValue = errorCodeValue;
-    }
-
-    public String getDocumentation() {
-        return documentation;
-    }
-
-    public void setDocumentation(String documentation) {
-        this.documentation = documentation;
     }
 }
