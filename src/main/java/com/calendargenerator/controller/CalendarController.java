@@ -20,7 +20,7 @@ public class CalendarController {
     }
 
     @RequestMapping(value = "/{groupId}", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> schedule(@PathVariable String groupId) throws Exception {
+    public ResponseEntity<String> schedule(@PathVariable String groupId) {
         return calendarService.getSchedule(groupId);
     }
 }
