@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-public class Classes {
+public class Lecture {
     @Id
     private UUID id = UUID.randomUUID();
     private final Calendar startDateCalendar;
