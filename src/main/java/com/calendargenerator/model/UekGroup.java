@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +18,7 @@ public class UekGroup {
     private UUID id = UUID.randomUUID();
     private String groupId;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity=ShortenedLecture.class)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = ShortenedLecture.class)
     private List<ShortenedLecture> lecture;
 
     public UekGroup(String groupId, List<ShortenedLecture> lecture) {

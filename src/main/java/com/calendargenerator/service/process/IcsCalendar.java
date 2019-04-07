@@ -11,10 +11,8 @@ import com.calendargenerator.model.Lecture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
 import java.text.DateFormatSymbols;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class IcsCalendar {
@@ -72,7 +70,7 @@ public class IcsCalendar {
 
     public List getDistinctLectures() {
         return lectures.stream()
-                .map(x -> Arrays.asList(x.getName(),x.getStartDateCalendar().get(Calendar.DAY_OF_WEEK)))
+                .map(lecture -> Map.of(lecture.getName(),lecture.getStartDateCalendar().get(Calendar.DAY_OF_WEEK)))
                 .distinct()
                 .collect(Collectors.toList());
     }
