@@ -11,10 +11,10 @@ import com.calendargenerator.model.Lecture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Array;
 import java.text.DateFormatSymbols;
-import java.util.Calendar;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class IcsCalendar {
@@ -70,9 +70,9 @@ public class IcsCalendar {
         log.info(lectureName + " on " + new DateFormatSymbols().getWeekdays()[lectureDayOfWeek] + " was succesfully deleted");
     }
 
-    private List<String> getDistinctLectureNames() {
+    public List getDistinctLectures() {
         return lectures.stream()
-                .map(Lecture::getName)
+                .map(x -> Arrays.asList(x.getName(),x.getStartDateCalendar().get(Calendar.DAY_OF_WEEK)))
                 .distinct()
                 .collect(Collectors.toList());
     }
