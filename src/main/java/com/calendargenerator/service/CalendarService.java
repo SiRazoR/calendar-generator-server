@@ -58,7 +58,7 @@ public class CalendarService {
 
     public ResponseEntity<Map> generateUniqueLink(UekGroup uekGroup) {
         groupsDAO.save(uekGroup);
-        Map<String, String> response = new HashMap<>() {
+        Map<String, String> response = new HashMap<String, String>() {
             {
                 put("id", uekGroup.getId().toString());
             }
