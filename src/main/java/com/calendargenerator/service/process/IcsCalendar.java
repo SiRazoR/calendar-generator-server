@@ -8,11 +8,14 @@ import biweekly.io.TimezoneAssignment;
 import biweekly.io.TimezoneInfo;
 import biweekly.property.Method;
 import com.calendargenerator.model.Lecture;
+import com.calendargenerator.model.ShortenedLecture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormatSymbols;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 public class IcsCalendar {
@@ -20,6 +23,7 @@ public class IcsCalendar {
     private ICalendar ical;
     private LecturesScraper scraper;
     private List<Lecture> lectures;
+    private final boolean MANDATORY = true;
 
     private IcsCalendar() {
         this.log = LoggerFactory.getLogger(this.getClass());
@@ -68,9 +72,9 @@ public class IcsCalendar {
         log.info(lectureName + " on " + new DateFormatSymbols().getWeekdays()[lectureDayOfWeek] + " was succesfully deleted");
     }
 
-    public List getDistinctLectures() {
+    public List<ShortenedLecture> getDistinctLectures() {
         return lectures.stream()
-                .map(lecture -> Map.of(lecture.getName(),lecture.getStartDateCalendar().get(Calendar.DAY_OF_WEEK)))
+                .map(lecture -> new ShortenedLecture(lecture.getName(), lecture.getStartDateCalendar().get(Calendar.DAY_OF_WEEK), MANDATORY))
                 .distinct()
                 .collect(Collectors.toList());
     }

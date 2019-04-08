@@ -4,9 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Objects;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -14,8 +14,7 @@ import javax.persistence.Id;
 public class ShortenedLecture {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private UUID id = UUID.randomUUID();
     private String name;
     private Integer dayOfTheWeek;
     private boolean mandatory;
@@ -24,6 +23,20 @@ public class ShortenedLecture {
         this.name = name;
         this.dayOfTheWeek = dayOfTheWeek;
         this.mandatory = mandatory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShortenedLecture that = (ShortenedLecture) o;
+        return name.equals(that.name) &&
+                dayOfTheWeek.equals(that.dayOfTheWeek);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, dayOfTheWeek);
     }
 }
 
