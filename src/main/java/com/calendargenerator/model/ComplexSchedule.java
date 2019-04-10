@@ -14,13 +14,13 @@ import java.util.UUID;
 @Data
 @Entity
 @NoArgsConstructor
-public class CombinedUekGroups {
+public class ComplexSchedule implements Schedule {
     @Id
     private UUID id = UUID.randomUUID();
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = UekGroup.class)
-    private List<UekGroup> groups;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = SimpleSchedule.class)
+    private List<SimpleSchedule> groups;
 
-    public CombinedUekGroups(List<UekGroup> groups) {
+    public ComplexSchedule(List<SimpleSchedule> groups) {
         this.groups = groups;
     }
 }

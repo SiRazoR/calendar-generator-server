@@ -21,21 +21,19 @@ import java.util.stream.Collectors;
 public class IcsCalendar {
     private Logger log;
     private ICalendar ical;
-    private LecturesScraper scraper;
     private List<Lecture> lectures;
     private final boolean MANDATORY = true;
 
-    private IcsCalendar() {
+    public IcsCalendar() {
         this.log = LoggerFactory.getLogger(this.getClass());
         this.ical = new ICalendar();
         this.ical.setMethod(Method.REQUEST);
         this.ical.setTimezoneInfo(getWarsawTimeZoneInfo());
-        this.scraper = new LecturesScraper();
     }
 
     public IcsCalendar(String groupId) {
         this();
-        this.lectures = scraper.getLectureList(groupId);
+        this.lectures = new LecturesScraper().getLectureList(groupId);
     }
 
     private TimezoneInfo getWarsawTimeZoneInfo() {
@@ -61,11 +59,6 @@ public class IcsCalendar {
         return event;
     }
 
-    public void removeLectures(String lectureName) {
-        this.lectures.removeIf(element -> element.getName().contains(lectureName));
-        log.info(lectureName + " was succesfully deleted");
-    }
-
     public void removeLectures(String lectureName, Integer lectureDayOfWeek) {
         this.lectures.removeIf(element -> element.getName().contains(lectureName) &&
                 element.getStartDateCalendar().get(Calendar.DAY_OF_WEEK) == lectureDayOfWeek);
@@ -77,6 +70,14 @@ public class IcsCalendar {
                 .map(lecture -> new ShortenedLecture(lecture.getName(), lecture.getStartDateCalendar().get(Calendar.DAY_OF_WEEK), MANDATORY))
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public void concatenateLectureList(IcsCalendar calendar) {
+        log.info("Adding " + calendar.lectures.size() + " lectures to the list");
+        if (this.lectures == null)
+            this.lectures = calendar.lectures;
+        else
+            this.lectures.addAll(calendar.lectures);
     }
 
     @Override

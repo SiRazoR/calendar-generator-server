@@ -1,34 +1,27 @@
 package com.calendargenerator.service;
 
-import com.calendargenerator.dao.CombinedGroupsDAO;
-import com.calendargenerator.dao.GroupsDAO;
-import com.calendargenerator.model.CombinedUekGroups;
-import com.calendargenerator.model.UekGroup;
+import com.calendargenerator.dao.ComplexScheduleDAO;
+import com.calendargenerator.exception.DataNotFoundException;
+import com.calendargenerator.model.ComplexSchedule;
+import com.calendargenerator.model.Schedule;
+import com.calendargenerator.model.SimpleSchedule;
 import com.calendargenerator.service.process.IcsCalendar;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CalendarService {
 
-    private GroupsDAO groupsDAO;
-    private CombinedGroupsDAO combinedGroupsDAO;
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private ComplexScheduleDAO complexScheduleDAO;
 
     @Autowired
-    public CalendarService(GroupsDAO groupsDAO, CombinedGroupsDAO combinedGroupsDAO) {
-        this.groupsDAO = groupsDAO;
-        this.combinedGroupsDAO = combinedGroupsDAO;
+    public CalendarService(ComplexScheduleDAO complexScheduleDAO) {
+        this.complexScheduleDAO = complexScheduleDAO;
     }
 
     public ResponseEntity<String> getSchedule(String groupId) {
@@ -38,45 +31,63 @@ public class CalendarService {
                 .body(calendar.toString());
     }
 
-    public ResponseEntity<String> getModifiedSchedule(String calendarGeneratedId) {
-        UekGroup uekGroup = groupsDAO.findById(UUID.fromString(calendarGeneratedId)).orElse(new UekGroup());
-        IcsCalendar calendar = new IcsCalendar(uekGroup.getGroupId());
-        uekGroup.getLecture().stream()
-                .filter(element -> !element.isMandatory())
-                .forEach(lecture -> calendar.removeLectures(lecture.getName(), lecture.getDayOfTheWeek()));
+    public ResponseEntity<String> getModifiedSchedule(String generatedId) {
+        ComplexSchedule complexSchedule = complexScheduleDAO.findById(UUID.fromString(generatedId)).orElse(null);
+        if(complexSchedule == null)
+            throw new DataNotFoundException("Provided ID:" + generatedId + " is invalid");
+
+        IcsCalendar response = new IcsCalendar();
+        complexSchedule.getGroups().stream()
+                .map(this::handleSimpleSchedule)
+                .forEach(response::concatenateLectureList);
 
         return ResponseEntity.ok()
                 .headers(generateHeaders())
-                .body(calendar.toString());
-
+                .body(response.toString());
     }
-    public ResponseEntity<List> getDistinctLectures(String groupId) {
+
+    private IcsCalendar handleSimpleSchedule(SimpleSchedule simpleSchedule) {
+        IcsCalendar calendar = new IcsCalendar(simpleSchedule.getGroupId());
+        simpleSchedule.getLecture().stream()
+                .filter(element -> !element.isMandatory())
+                .forEach(lecture -> calendar.removeLectures(lecture.getName(), lecture.getDayOfTheWeek()));
+        return calendar;
+    }
+
+    public ResponseEntity<SimpleSchedule> getDistinctLectures(String groupId) {
         IcsCalendar calendar = new IcsCalendar(groupId);
         return ResponseEntity.ok()
-                .body(calendar.getDistinctLectures());
+                .body(new SimpleSchedule(groupId, calendar.getDistinctLectures()));
     }
 
-    public ResponseEntity<Map> generateUniqueLink(UekGroup uekGroup) {
-        groupsDAO.save(uekGroup);
+    public ResponseEntity<Map> generateUniqueLink(Schedule schedule) {
+        String scheduleId;
+        if (schedule instanceof SimpleSchedule) {
+            ComplexSchedule complexSchedule = new ComplexSchedule(Collections.singletonList((SimpleSchedule) schedule));
+            scheduleId = complexSchedule.getId().toString();
+            complexScheduleDAO.save(complexSchedule);
+        } else {
+            scheduleId = schedule.getId().toString();
+            complexScheduleDAO.save((ComplexSchedule) schedule);
+        }
         Map<String, String> response = new HashMap<String, String>() {
             {
-                put("id", uekGroup.getId().toString());
+                put("id", scheduleId);
             }
         };
         return ResponseEntity.ok()
                 .body(response);
     }
 
-    public ResponseEntity<List<UekGroup>> getAllGroupsFromDatabase() {
+    public ResponseEntity<List<ComplexSchedule>> getAllComplexSchedulesFromDatabase() {
         return ResponseEntity.ok()
-                .body(groupsDAO.findAll());
+                .body(complexScheduleDAO.findAll());
     }
 
-    public ResponseEntity<List<CombinedUekGroups>> getAllCombinedGroupsFromDatabase() {
+    public ResponseEntity<Optional<ComplexSchedule>> getComplexSchedulesFromDatabase(UUID uuid) {
         return ResponseEntity.ok()
-                .body(combinedGroupsDAO.findAll());
+                .body(complexScheduleDAO.findById(uuid));
     }
-
 
     private HttpHeaders generateHeaders() {
         return new HttpHeaders() {{

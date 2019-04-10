@@ -1,10 +1,9 @@
 package com.calendargenerator.init;
 
-import com.calendargenerator.dao.CombinedGroupsDAO;
-import com.calendargenerator.dao.GroupsDAO;
-import com.calendargenerator.model.CombinedUekGroups;
+import com.calendargenerator.dao.ComplexScheduleDAO;
+import com.calendargenerator.model.ComplexSchedule;
 import com.calendargenerator.model.ShortenedLecture;
-import com.calendargenerator.model.UekGroup;
+import com.calendargenerator.model.SimpleSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -13,23 +12,20 @@ import java.util.Arrays;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
-    private GroupsDAO groupsDAO;
-    private CombinedGroupsDAO combinedGroupsDAO;
+    private ComplexScheduleDAO complexScheduleDAO;
 
     @Autowired
-    public DatabaseSeeder(GroupsDAO groupsDAO, CombinedGroupsDAO combinedGroupsDAO) {
-        this.groupsDAO = groupsDAO;
-        this.combinedGroupsDAO = combinedGroupsDAO;
+    public DatabaseSeeder(ComplexScheduleDAO complexScheduleDAO) {
+        this.complexScheduleDAO = complexScheduleDAO;
     }
 
     @Override
     public void run(String... args) throws Exception {
         ShortenedLecture shortenedLecture = new ShortenedLecture("initialTestData-Modelowanie danych", 2, true);
         ShortenedLecture shortenedLecture2 = new ShortenedLecture("initialTestData-Angielski", 1, true);
-        UekGroup uekGroup = new UekGroup("2222", Arrays.asList(shortenedLecture, shortenedLecture2));
-        UekGroup uekGroup2 = new UekGroup("1111", Arrays.asList(shortenedLecture, shortenedLecture));
-        CombinedUekGroups combinedUekGroups = new CombinedUekGroups(Arrays.asList(uekGroup, uekGroup2));
-        groupsDAO.save(uekGroup);
-        combinedGroupsDAO.save(combinedUekGroups);
+        SimpleSchedule simpleSchedule = new SimpleSchedule("2222", Arrays.asList(shortenedLecture, shortenedLecture2));
+        SimpleSchedule simpleSchedule2 = new SimpleSchedule("1111", Arrays.asList(shortenedLecture, shortenedLecture));
+        ComplexSchedule complexSchedule = new ComplexSchedule(Arrays.asList(simpleSchedule, simpleSchedule2));
+        complexScheduleDAO.save(complexSchedule);
     }
 }

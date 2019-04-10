@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @Entity
 @NoArgsConstructor
-public class UekGroup {
+public class SimpleSchedule implements Schedule{
     @Id
     private UUID id = UUID.randomUUID();
     private String groupId;
@@ -21,7 +21,7 @@ public class UekGroup {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = ShortenedLecture.class)
     private List<ShortenedLecture> lecture;
 
-    public UekGroup(String groupId, List<ShortenedLecture> lecture) {
+    public SimpleSchedule(String groupId, List<ShortenedLecture> lecture) {
         this.groupId = groupId;
         this.lecture = lecture;
     }
