@@ -34,12 +34,6 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-    @ApiMethod(description = "Redirect to main page")
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String greet() {
-        return "Add to URL above /calendar/{groupId} without curly brackets. For documentation navigate to {site-url}/jsondoc-ui.html and type http://{site-url}/jsondoc";
-    }
-
     @ApiMethod(description = "Get ical file using provided group id")
     @RequestMapping(value = "/{groupId}", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> schedule(@ApiPathParam(name = "groupId", description = "Group id, example: 140781")
