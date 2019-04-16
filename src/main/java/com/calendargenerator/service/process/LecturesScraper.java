@@ -35,10 +35,10 @@ class LecturesScraper {
 
         try {
             if (period == 0)
-                throw new DataNotFoundException("Group ID may be invalid, found 0 classes on provided data: " + groupId);
+                throw new DataNotFoundException("Group ID may be invalid, found 0 classes on provided data: {" + groupId + "}");
 
             final Document document = Jsoup.connect(url).get();
-            validateGroupId(document);
+            validateGroupId(document, groupId);
 
             for (Element row : document.select("tr")) {
                 if (row.select(".termin").text().isEmpty()) {
@@ -69,11 +69,11 @@ class LecturesScraper {
         return list;
     }
 
-    private void validateGroupId(Document document) {
+    private void validateGroupId(Document document, String groupId) {
         for (Element row : document.select(".grupa")) {
             log.info("Checking if group id is valid");
             if (row.text().isEmpty())
-                throw new DataNotFoundException("Group ID is invalid");
+                throw new DataNotFoundException("Group ID {" + groupId + "} is invalid");
             log.info("Found group: " + row.text());
         }
     }

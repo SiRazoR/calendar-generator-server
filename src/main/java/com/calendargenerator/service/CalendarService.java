@@ -28,22 +28,22 @@ public class CalendarService {
         IcsCalendar calendar = new IcsCalendar(groupId);
         return ResponseEntity.ok()
                 .headers(generateHeaders())
-                .body(calendar.toString());
+                .body(calendar.getStringRepresentation());
     }
 
-    public ResponseEntity<String> getModifiedSchedule(String generatedId) {
-        ComplexSchedule complexSchedule = complexScheduleDAO.findById(UUID.fromString(generatedId)).orElse(null);
-        if(complexSchedule == null)
-            throw new DataNotFoundException("Provided ID:" + generatedId + " is invalid");
+    public ResponseEntity<String> getModifiedSchedule(String uuid) {
+        ComplexSchedule complexSchedule = complexScheduleDAO.findById(UUID.fromString(uuid)).orElse(null);
+        if (complexSchedule == null)
+            throw new DataNotFoundException("Provided UUID: {" + uuid + "} is invalid");
 
-        IcsCalendar response = new IcsCalendar();
+        IcsCalendar calendar = new IcsCalendar();
         complexSchedule.getGroups().stream()
                 .map(this::handleSimpleSchedule)
-                .forEach(response::concatenateLectureList);
+                .forEach(calendar::concatenateLectureList);
 
         return ResponseEntity.ok()
                 .headers(generateHeaders())
-                .body(response.toString());
+                .body(calendar.getStringRepresentation());
     }
 
     private IcsCalendar handleSimpleSchedule(SimpleSchedule simpleSchedule) {
@@ -84,9 +84,13 @@ public class CalendarService {
                 .body(complexScheduleDAO.findAll());
     }
 
-    public ResponseEntity<Optional<ComplexSchedule>> getComplexSchedulesFromDatabase(UUID uuid) {
+    public ResponseEntity<Optional<ComplexSchedule>> getComplexScheduleFromDatabase(String uuid) {
+        Optional<ComplexSchedule> response = complexScheduleDAO.findById(UUID.fromString(uuid));
+        if (!response.isPresent())
+            throw new DataNotFoundException("Provided UUID: {" + uuid + "} is invalid");
+
         return ResponseEntity.ok()
-                .body(complexScheduleDAO.findById(uuid));
+                .body(response);
     }
 
     private HttpHeaders generateHeaders() {

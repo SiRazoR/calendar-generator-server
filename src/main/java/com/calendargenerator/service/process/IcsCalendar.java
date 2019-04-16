@@ -80,8 +80,7 @@ public class IcsCalendar {
             this.lectures.addAll(calendar.lectures);
     }
 
-    @Override
-    public String toString() {
+    public String getStringRepresentation() {
         generateIcsCalendar();
         log.info("Proceed to generate output string");
         return Biweekly.write(ical).go();
