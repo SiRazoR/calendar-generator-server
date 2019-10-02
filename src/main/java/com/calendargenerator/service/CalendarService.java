@@ -5,6 +5,7 @@ import com.calendargenerator.exception.DataNotFoundException;
 import com.calendargenerator.model.ComplexSchedule;
 import com.calendargenerator.model.Schedule;
 import com.calendargenerator.model.SimpleSchedule;
+import com.calendargenerator.service.process.GroupScraper;
 import com.calendargenerator.service.process.IcsCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +53,11 @@ public class CalendarService {
                 .filter(element -> !element.isMandatory())
                 .forEach(lecture -> calendar.removeLectures(lecture.getName(), lecture.getDayOfTheWeek()));
         return calendar;
+    }
+
+    public ResponseEntity<Map<String, String>> getGroupsWithId() {
+        return ResponseEntity.ok()
+                .body(new GroupScraper().getGroups());
     }
 
     public ResponseEntity<SimpleSchedule> getDistinctLectures(String groupId) {

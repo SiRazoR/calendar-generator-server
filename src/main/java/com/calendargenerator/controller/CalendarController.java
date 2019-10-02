@@ -47,6 +47,12 @@ public class CalendarController {
         return calendarService.getModifiedSchedule(uuid);
     }
 
+    @ApiMethod(description = "Get all group names with their id")
+    @RequestMapping(value = "/groups", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,String>> groups() {
+        return calendarService.getGroupsWithId();
+    }
+
     @ApiMethod(description = "Get distinct lecture list using provided group id")
     @RequestMapping(value = "/distinct/{groupId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SimpleSchedule> distinctLectures(@ApiPathParam(name = "groupId", description = "Group id, example: 140781")

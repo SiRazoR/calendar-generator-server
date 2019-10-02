@@ -1,10 +1,12 @@
 package com.calendargenerator.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Calendar;
 
 @Data
+@Builder
 public class Lecture {
     private final Calendar startDateCalendar;
     private final Calendar endDateCalendar;

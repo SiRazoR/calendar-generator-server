@@ -20,7 +20,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         ShortenedLecture shortenedLecture = new ShortenedLecture("initialTestData-Modelowanie danych", 2, true);
         ShortenedLecture shortenedLecture2 = new ShortenedLecture("initialTestData-Angielski", 1, true);
         SimpleSchedule simpleSchedule = new SimpleSchedule("2222", Arrays.asList(shortenedLecture, shortenedLecture2));
