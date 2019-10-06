@@ -64,7 +64,6 @@
             <artifactId>jsondoc-ui-webjar</artifactId>
             <version>LATEST</version>
         </dependency>
-
     </dependencies>
 
     <build>
