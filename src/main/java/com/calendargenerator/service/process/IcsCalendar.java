@@ -23,6 +23,7 @@ public class IcsCalendar {
     private ICalendar ical;
     private List<Lecture> lectures;
     private final boolean MANDATORY = true;
+    private static final String TIMEZONE = "Europe/Warsaw";
 
     public IcsCalendar() {
         this.log = LoggerFactory.getLogger(this.getClass());
@@ -37,8 +38,8 @@ public class IcsCalendar {
     }
 
     private TimezoneInfo getWarsawTimeZoneInfo() {
-        TimeZone timezone = TimeZone.getTimeZone("Europe/Warsaw");
-        VTimezone component = new VTimezone("Europe/Warsaw");
+        TimeZone timezone = TimeZone.getTimeZone(TIMEZONE);
+        VTimezone component = new VTimezone(TIMEZONE);
         TimezoneInfo timezoneInfo = new TimezoneInfo();
         timezoneInfo.setDefaultTimezone(new TimezoneAssignment(timezone, component));
         return timezoneInfo;
