@@ -5,6 +5,7 @@ import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiMethod;
 import org.jsondoc.core.pojo.ApiStage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,7 +35,7 @@ public class HomeController {
     }
 
     @ApiMethod(description = "To wake up API that is deployed on Heroku")
-    @RequestMapping(value = "/wake", method = RequestMethod.GET)
+    @RequestMapping(value = "/wake", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> wake() {
         return homeService.wakeUp();
     }
